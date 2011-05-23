@@ -36,19 +36,18 @@
 - (id)initWithDictionary:(NSDictionary *)dict
 {
     self = [self init];
-  //  NSLog(@"Group from dict: %@", dict);
 
     // Seems to sometimes get ID as NSNumber from JSON
     self.groupId = [[dict valueForKey:@"id"] description];
     self.name = [dict valueForKey:@"name"];
     self.slug = [dict valueForKey:@"slug"];
-    self.description = [dict valueForKey:@"description"];
+    self.description = [dict valueForKey:@"name"];
     self.kind = [dict valueForKey:@"kind"];
     self.creator = [[[MHConvoreUser alloc] initWithDictionary:[dict valueForKey:@"creator"]] autorelease];
     self.url = [NSURL URLWithString:[dict valueForKey:@"url"] relativeToURL:[MHConvoreClient baseURL]];
     self.unreadCount = [[dict valueForKey:@"unread"] intValue];
     self.topicsCount = [[dict valueForKey:@"topics_count"] intValue];
-    
+
     return self;
 }
 

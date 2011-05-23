@@ -29,14 +29,14 @@
 {
     self = [self init];
     
-    //NSLog(@"Topic from dict: %@", dict);
+    NSLog(@"Topic from dict: %@", dict);
 
     // Seems to sometimes get ID as NSNumber from JSON
     self.topicId = [[dict valueForKey:@"id"] description];
-    NSLog(@"New topic with topicId of class: %@", [self.topicId class]);
     self.name = [dict valueForKey:@"name"];
     self.url = [NSURL URLWithString:[dict valueForKey:@"url"] relativeToURL:[MHConvoreClient baseURL]];
-    
+
+    NSLog(@"New topic: %@", self.name);    
     return self;
 }
 
