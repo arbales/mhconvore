@@ -21,6 +21,7 @@
 @synthesize listener;
 @synthesize username;
 @synthesize password;
+@synthesize currentUser;
 @synthesize cursor;
 @synthesize liveTimeout;
 @synthesize liveFrequency;
@@ -65,7 +66,7 @@
 #pragma mark Listener Dispatching
 - (void)dispatchMessage:(NSDictionary *)message
 {
-    NSLog(@"Dispatch message: %@", message);
+  //NSLog(@"Dispatch message: %@", message);
     if ([self.listener respondsToSelector:@selector(newMessage:)]) {
         [self.listener newMessage:[[[MHConvoreMessage alloc] initWithDictionary:message] autorelease]];
     }   
@@ -108,13 +109,14 @@
 
 - (void)dispatchMessageFromDict:(NSDictionary *)message
 {
-    NSString *kind = [message valueForKey:@"kind"];
+  NSString *kind = [message valueForKey:@"kind"];
+  //  NSLog(@"Received: '%@':\n%@", kind, message);
     
     SEL selector = NSSelectorFromString([self dispatchSelectorFromKind:kind]);
     if ([self respondsToSelector:selector]) {
         [self performSelector:selector withObject:message];
     } else {
-        NSLog(@"Unhandled message of kind '%@':\n%@", kind, message);
+      NSLog(@"Unhandled message of kind '%@':\n%@", kind, message);
     }
 }
 
@@ -213,7 +215,7 @@
 #pragma mark -
 #pragma mark Public API
 // Needs to be made asynchronous
-- (void)listen
+- (void)listen:(void (^)())failure_block;
 {
     NSLog(@"Starting to listen");
     
@@ -227,14 +229,9 @@
             [self dispatchMessageFromDict:message];
         }
         
-        [self listen];
+      [self listen:failure_block];
     }];
-    
-    [request setFailedBlock:^ {
-        NSLog(@"Error 2: %@", [request error]);
-        
-        [self listen];
-    }];
+    [request setFailedBlock: failure_block];
     
     [request startAsynchronous];
     
@@ -250,6 +247,7 @@
     [self sendRequestForPath:@"/api/account/verify.json" 
              withFinishBlock:block
            createObjectBlock:^id(NSDictionary *json) {
+             [self setCurrentUser: [[MHConvoreUser alloc] initWithDictionary:json]];
                return [[[MHConvoreUser alloc] initWithDictionary:json] autorelease];
            }];
 }
@@ -378,7 +376,8 @@
              withFinishBlock:block
            createObjectBlock:^id(NSDictionary *json) {
                NSMutableArray *messages = [NSMutableArray array];
-               for (NSDictionary *message in [json valueForKey:@"messages"]) {
+               for (NSMutableDictionary *message in [json valueForKey:@"messages"]) {
+                 //[message setObject:[[NSApp delegate] topics_controller] forKey: "topic"
                    [messages addObject:[[[MHConvoreMessage alloc] initWithDictionary:message] autorelease]];
                }
                return [NSArray arrayWithArray:messages];

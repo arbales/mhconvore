@@ -30,5 +30,6 @@
 @property(nonatomic, copy) NSString *renderedMessage;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
+- (id)initWithDictionary:(NSDictionary *)dict andUser:(MHConvoreUser *)aUser withDate:(NSDate *)aDate;
 
 @end

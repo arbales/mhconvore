@@ -25,6 +25,7 @@
 @interface MHConvoreClient : NSObject {
 @private
     id<MHConvoreClientListener> listener;
+    MHConvoreUser *currentUser;
     NSString *username;
     NSString *password;
     NSString *cursor;
@@ -32,6 +33,7 @@
     NSInteger liveFrequency;
 }
 @property(nonatomic, retain) id<MHConvoreClientListener> listener;
+@property(nonatomic, retain) MHConvoreUser *currentUser;
 @property(nonatomic, copy) NSString *username;
 @property(nonatomic, copy) NSString *password;
 @property(nonatomic, copy) NSString *cursor; // Need implementing
@@ -51,7 +53,7 @@
 
 // Updates include new message notifications, new topic notifications, message deletion notifications, 
 // member log in and log out notifications, etc.
-- (void)listen;
+- (void)listen:(void (^)())failure_block;
 
 // Block based API for these
 

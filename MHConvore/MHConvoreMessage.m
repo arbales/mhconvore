@@ -31,19 +31,31 @@
 
 - (id)initWithDictionary:(NSDictionary *)dict
 {
-   // NSLog(@"Init with dictionary: %@", dict);
+  // NSLog(@"Init with dictionary: %@", dict);
     
     self.message = [dict valueForKey:@"message"];
-    self.renderedMessage = [dict valueForKey:@"rendered"];
+    // self.renderedMessage = [dict valueForKey:@"rendered"];
    
     // Seems to sometimes get ID as NSNumber from JSON
     self.messageId = [[dict valueForKey:@"id"] description];
     self.groupId = [[dict valueForKey:@"group"] stringValue];
-    self.topic = [[[MHConvoreTopic alloc] initWithDictionary:[dict valueForKey:@"topic"]] autorelease];
+    if ([dict objectForKey:@"user"] != nil){
     self.user = [[[MHConvoreUser alloc] initWithDictionary:[dict valueForKey:@"user"]] autorelease];
-    
+    }
+    if ([dict objectForKey:@"topic"] != nil){
+      self.topic = [[[MHConvoreTopic alloc] initWithDictionary:[dict valueForKey:@"topic"]] autorelease];
+    }   
     return self;
 }
+
+- (id)initWithDictionary:(NSDictionary *)dict andUser:(MHConvoreUser *)aUser withDate:(NSDate *)aDate {
+  self.message = [dict valueForKey:@"message"];
+  self.messageId = [[dict valueForKey:@"id"] description];
+  self.user = aUser;
+  // self.date = aDate;
+  return self;
+}
+
 
 - (void)dealloc
 {

@@ -29,7 +29,7 @@
 {
     self = [self init];
     
-    NSLog(@"Topic from dict: %@", dict);
+    //    NSLog(@"Topic from dict: %@", dict);
 
     // Seems to sometimes get ID as NSNumber from JSON
     self.topicId = [[dict valueForKey:@"id"] description];
