@@ -6,6 +6,6 @@ This is an Objective-C framework for the new Convore chat service.
 How to use
 ----------
 
-It's currently easiest to copy the files MHConvore* into your project. You also need ASIHTTPRequest and JSON-framework to build.
+cd into your XCode project directory and `git clone` or `git submodule add` this repository.
 
-[A small example of how to use it](http://simplyhacking.com/mhconvore.html)
+In XCode, make a group and Add Files to it. Select the files you like, and make sure that XCode doesn't copy files to destinations or create folder references.
